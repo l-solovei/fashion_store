@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'fashion_store.apps.user',
     'fashion_store.apps.order',
     'fashion_store.apps.product',
-
+    'fashion_store.apps.images'
 ]
 
 MIDDLEWARE = [
