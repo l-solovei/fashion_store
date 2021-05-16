@@ -21,6 +21,7 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
     permission_classes = (IsAuthenticated,)
+    http_method_names = ['get', 'patch', 'delete']
 
     def get_object(self):
         user = self.request.user
@@ -29,3 +30,4 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
             return self.request.user
         else:
             return super().get_object()
+
