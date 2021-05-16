@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
+from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser,
+                                        PermissionsMixin)
 
 from utils.abstract_models import CreateUpdateModel
 
@@ -26,7 +27,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class UserModel(AbstractBaseUser, CreateUpdateModel):
+class UserModel(AbstractBaseUser, PermissionsMixin, CreateUpdateModel):
     first_name = models.CharField(max_length=50, verbose_name='First Name')
     last_name = models.CharField(max_length=50, verbose_name='Last Name')
     email = models.EmailField(max_length=100, unique=True,

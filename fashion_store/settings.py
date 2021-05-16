@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 
     #additional
     'rest_framework',
+    'drf_yasg',
 
     #project apps
     'fashion_store.apps.user',
@@ -76,6 +77,13 @@ WSGI_APPLICATION = 'fashion_store.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(default=ENV.get('DB_URL'))
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 
