@@ -121,7 +121,4 @@ class ProductPropertyModel(CreateUpdateModel):
                             verbose_name='Size')
     color = models.OneToOneField(ColorModel, on_delete=models.CASCADE)
     quantity = models.IntegerField()
-    image = models.ImageField(upload_to='product_images/%Y/%m/%d', null=True,
-                              verbose_name='Image')
-    # images = ArrayField(
-    #     models.ForeignKey(ImageModel, on_delete=models.CASCADE))
+
