@@ -53,7 +53,7 @@ class MaterialModel(CreateUpdateModel):
 
 class ClothTypeModel(CreateUpdateModel):
     cloth_type = models.CharField(max_length=20, unique=True,
-                                  verbose_name='Material')
+                                  verbose_name='Cloth Type')
 
     class Meta:
         db_table = 'cloth_type'
@@ -77,7 +77,9 @@ class ProductModel(CreateUpdateModel):
     ]
 
     name = models.CharField(max_length=50, verbose_name='Name')
-    brand_name = models.ManyToManyField(BrandModel, verbose_name='Brand')
+    brand_name = models.ForeignKey(BrandModel, on_delete=models.CASCADE,
+                                   related_name='product_brand_name',
+                                   verbose_name='Brand')
     basic_price = models.FloatField(validators=[MinValueValidator(0.0)],
                                     verbose_name='Basic Prise')
     gender = models.CharField(max_length=5, choices=gender_choices,
@@ -89,7 +91,6 @@ class ProductModel(CreateUpdateModel):
     material = models.ForeignKey(MaterialModel, on_delete=models.CASCADE,
                                  related_name='product_material',
                                  verbose_name='Material')
-    quantity = models.PositiveIntegerField(verbose_name="Quantity")
     owner = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
     class Meta:
@@ -119,6 +120,5 @@ class ProductPropertyModel(CreateUpdateModel):
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
     size = models.CharField(max_length=3, choices=size_choices,
                             verbose_name='Size')
-    color = models.OneToOneField(ColorModel, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
+    color = models.ForeignKey(ColorModel, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(verbose_name="Quantity")
