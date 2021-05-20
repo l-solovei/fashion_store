@@ -21,9 +21,11 @@ urlpatterns = [
     path('delete_cloth_type/<int:pk>/', ColorDestroyAPIView.as_view(),
          name='delete_delete_material'),
 
-    path('product/', ProductListCreateAPIView.as_view(),
+    path('', ProductListCreateAPIView.as_view(),
          name='list_create_product'),
+    path('<int:pk>/', ProductRetrieveUpdateDestroyAPIView.as_view(),
+         name='retrieve_update_delete_product'),
 
-    path('product/<int:pk>/', ProductPropertyCreateAPIView.as_view(),
-         name='create_product_property'),
+    # path('<int:pk>/property/', ProductPropertyCreateAPIView.as_view(),
+    #      name='create_product_property'), #do it in product
 ]

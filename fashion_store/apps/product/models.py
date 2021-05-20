@@ -79,7 +79,7 @@ class ProductModel(CreateUpdateModel):
     name = models.CharField(max_length=50, verbose_name='Name')
     brand_name = models.ForeignKey(BrandModel, on_delete=models.CASCADE,
                                    related_name='product_brand_name',
-                                   verbose_name='Brand')
+                                   verbose_name='Brand', blank=True)
     basic_price = models.FloatField(validators=[MinValueValidator(0.0)],
                                     verbose_name='Basic Prise')
     gender = models.CharField(max_length=5, choices=gender_choices,
@@ -87,10 +87,10 @@ class ProductModel(CreateUpdateModel):
     description = models.TextField(verbose_name='Description')
     cloth_type = models.ForeignKey(ClothTypeModel, on_delete=models.CASCADE,
                                    related_name='product_cloth_type',
-                                   verbose_name='ClothType')
+                                   verbose_name='ClothType', blank=True)
     material = models.ForeignKey(MaterialModel, on_delete=models.CASCADE,
                                  related_name='product_material',
-                                 verbose_name='Material')
+                                 verbose_name='Material', blank=True)
     owner = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
     class Meta:
@@ -117,7 +117,9 @@ class ProductPropertyModel(CreateUpdateModel):
         (xl, 'XL'),
         (xxl, 'XXL')
     ]
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE,
+                                related_name="product_property",
+                                verbose_name='Product')
     size = models.CharField(max_length=3, choices=size_choices,
                             verbose_name='Size')
     color = models.ForeignKey(ColorModel, on_delete=models.CASCADE)

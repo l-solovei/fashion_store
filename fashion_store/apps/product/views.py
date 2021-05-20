@@ -1,6 +1,6 @@
 from rest_framework.generics import CreateAPIView, DestroyAPIView, \
-    ListCreateAPIView, get_object_or_404
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+    ListCreateAPIView, get_object_or_404, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
 from .models import BrandModel, ColorModel, MaterialModel, ClothTypeModel, \
     ProductModel
@@ -75,7 +75,7 @@ class ClothTypeDestroyAPIView(DestroyAPIView):
 class ProductListCreateAPIView(ListCreateAPIView):
     serializer_class = ProductSerializer
     queryset = ProductModel.objects.all()
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(
@@ -83,14 +83,31 @@ class ProductListCreateAPIView(ListCreateAPIView):
         )
 
 
+class ProductRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    """Read, update and delete user"""
+
+    model = ProductModel
+    serializer_class = ProductSerializer
+    queryset = ProductModel.objects.all()
+    #permission_classes = (IsAuthenticated,) #IsProductOwner
+    http_method_names = ['get', 'patch', 'delete']
+
+    # def get_permissions(self):
+    #
+    #     if self.request.method == "GET":
+    #         return [AllowAny()]
+    #     else:
+    #         return [IsProductOwner()]
+
+
 class ProductPropertyCreateAPIView(CreateAPIView):
     serializer_class = ProductPropertySerializer
     queryset = ProductModel.objects.all()
-    permission_classes = (IsAuthenticated,) #IsProductOwner
+    #permission_classes = (IsAuthenticated,) #IsProductOwner
 
     def perform_create(self, serializer):
         product_id = self.kwargs.get('pk')
-        color_id = self.kwargs.get('pk')
+        #color_id = self.kwargs.get('pk')
         product = get_object_or_404(ProductModel, pk=product_id)
-        color = get_object_or_404(ColorModel, pk=color_id)
-        serializer.save(product=product, color=color)
+        #color = get_object_or_404(ColorModel, pk=color_id)
+        serializer.save(product=product)#, color=color)
