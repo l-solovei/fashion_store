@@ -42,7 +42,9 @@ class ProductPropertySerializer(ModelSerializer):
         product = validated_data.pop('product')
         color = validated_data.pop('color')
 
-        product_property = ProductPropertyModel.objects.create(product=product, color=color, **validated_data)
+        product_property = ProductPropertyModel.objects.create(product=product,
+                                                               color=color,
+                                                               **validated_data)  # noqa
         product_property.save()
 
         return product_property
@@ -56,19 +58,19 @@ class ProductPropertySerializer(ModelSerializer):
 
         color_serializer = ColorSerializer(data=color)
         if color_serializer.is_valid():
-            color_serializer.update(instance=instance.color, validated_data=color_serializer.validated_data)
+            color_serializer.update(instance=instance.color,
+                                    validated_data=color_serializer.validated_data)  # noqa
 
         return instance
 
 
 class ProductSerializer(ModelSerializer):
-    # PROBLEM - не обирає, а створює новий об'єкт, треба робити перевірку чи є такий в БД
-    # brand_name = BrandSerializer(source='BrandModel', required=False)
-    # cloth_type = ClothTypeSerializer(source='ClothTypeModel', required=False)
-    # material = MaterialSerializer(source='MaterialModel', required=False)
-    # owner = UserSerializer(source='UserModel', required=False)
 
     product_property = ProductPropertySerializer(many=True)
+    # brand_name = BrandSerializer(many=False)
+    # cloth_type = ClothTypeSerializer(many=False)
+    # material = MaterialSerializer(many=False)
+    # owner = UserSerializer(many=False)
 
     class Meta:
         model = ProductModel
@@ -82,11 +84,14 @@ class ProductSerializer(ModelSerializer):
         owner = validated_data.pop('owner')
         product_properties = validated_data.pop('product_property')
 
-        product = ProductModel.objects.create(brand_name=brand_name, cloth_type=cloth_type, material=material,
+        product = ProductModel.objects.create(brand_name=brand_name,
+                                              cloth_type=cloth_type,
+                                              material=material,
                                               owner=owner, **validated_data)
 
         for product_property in product_properties:
-            ProductPropertyModel.objects.create(product=product, **product_property)
+            ProductPropertyModel.objects.create(product=product,
+                                                **product_property)
 
         return product
 
@@ -101,31 +106,36 @@ class ProductSerializer(ModelSerializer):
         product_property = list(product_property)
 
         instance.name = validated_data.get('name', instance.name)
-        instance.basic_price = validated_data.get('basic_price', instance.basic_price)
+        instance.basic_price = validated_data.get('basic_price',
+                                                  instance.basic_price)
         instance.gender = validated_data.get('gender', instance.gender)
-        instance.description = validated_data.get('description', instance.description)
+        instance.description = validated_data.get('description',
+                                                  instance.description)
 
-        brand_name_serializer = BrandSerializer(data=brand_name)  # don`t update
-        if brand_name_serializer.is_valid():
+        brand_name_serializer = BrandSerializer(
+            data=brand_name)  # don`t update
+        if brand_name_serializer.is_valid(raise_exception=True):
             brand_name_serializer.update(instance=instance.brand_name,
                                          validated_data=brand_name_serializer.validated_data)
 
         cloth_type_serializer = ClothTypeSerializer(data=cloth_type)
-        if cloth_type_serializer.is_valid():
+        if cloth_type_serializer.is_valid(raise_exception=True):
             cloth_type_serializer.update(instance=instance.cloth_type,
                                          validated_data=cloth_type_serializer.validated_data)
 
         material_serializer = MaterialSerializer(data=material)
-        if material_serializer.is_valid():
+        if material_serializer.is_valid(raise_exception=True):
             material_serializer.update(instance=instance.material,
                                        validated_data=material_serializer.validated_data)
 
         for product_property_data in product_properties_data:
-            product_property_serializer = ProductPropertySerializer(data=product_property_data)
-            if product_property_serializer.is_valid():
-                product_property_serializer.update(instance=instance.product_property,
-                                                   validated_data=product_property_serializer.validated_data)
-            #product_property.update(product_property_data)
+            product_property_serializer = ProductPropertySerializer(
+                data=product_property_data)
+            if product_property_serializer.is_valid(raise_exception=True):
+                product_property_serializer.update(
+                    instance=instance.product_property,
+                    validated_data=product_property_serializer.validated_data)
+            # product_property.update(product_property_data)
             # product_property.size = product_property_data.get('size', product_property.size)
             # product_property.quantity = product_property_data.get('quantity', product_property.quantity)
             # # product_property.color = product_property_data.pop('color')

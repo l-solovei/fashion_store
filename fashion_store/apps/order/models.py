@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from phone_field import PhoneField
 from django.contrib.auth import get_user_model
 
@@ -68,4 +67,4 @@ class SelectedProductsModel(CreateUpdateModel):
     size = models.CharField(max_length=3)
     product = models.ForeignKey(ProductModel, verbose_name='Product',
                                 on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()

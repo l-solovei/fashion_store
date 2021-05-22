@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     #additional
     'rest_framework',
     'drf_yasg',
+    'phone_field',
 
     #project apps
     'fashion_store.apps.user',
